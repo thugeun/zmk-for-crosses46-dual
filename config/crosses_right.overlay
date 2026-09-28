@@ -1,0 +1,14 @@
+// Right-hand trackball: overrides for the upstream cb-zmk-keebs listener.
+
+&trackball_central_listener {
+    status = "okay";
+    device = <&trackball_central>;
+
+    // While the trackball is moving, temporarily activate the Mouse layer
+    // (keymap index 3). The layer turns off 500 ms after the last movement
+    // or as soon as a key is pressed. The processor refreshes its own timer
+    // on every movement, so no per-layer override is needed.
+    input-processors
+        = <&zip_temp_layer 3 500>
+        , <&zip_ble_report_rate_limit>;
+};

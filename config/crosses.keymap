@@ -52,5 +52,49 @@
                                                      &trans     &trans     &trans     &trans       &trans     &trans     
             >;
         };
+
+        extra1_layer {
+            display-name = "Extra1";
+            bindings = <
+                &trans &trans &trans &trans &trans &trans &trans &trans &trans &trans &trans &trans
+                &trans &trans &trans &trans &trans &trans &trans &trans &trans &trans &trans &trans
+                &trans &trans &trans &trans &trans &trans &trans &trans &trans &trans &trans &trans
+                &trans &trans &trans &trans &trans &trans &trans &trans &trans &trans &trans &trans
+                                                    &trans &trans &trans &trans &trans &trans
+            >;
+        };
+
+        extra2_layer {
+            display-name = "Extra2";
+            bindings = <
+                &trans &trans &trans &trans &trans &trans &trans &trans &trans &trans &trans &trans
+                &trans &trans &trans &trans &trans &trans &trans &trans &trans &trans &trans &trans
+                &trans &trans &trans &trans &trans &trans &trans &trans &trans &trans &trans &trans
+                &trans &trans &trans &trans &trans &trans &trans &trans &trans &trans &trans &trans
+                                                    &trans &trans &trans &trans &trans &trans
+            >;
+        };
+
+        extra3_layer {
+            display-name = "Extra3";
+            bindings = <
+                &trans &trans &trans &trans &trans &trans &trans &trans &trans &trans &trans &trans
+                &trans &trans &trans &trans &trans &trans &trans &trans &trans &trans &trans &trans
+                &trans &trans &trans &trans &trans &trans &trans &trans &trans &trans &trans &trans
+                &trans &trans &trans &trans &trans &trans &trans &trans &trans &trans &trans &trans
+                                                    &trans &trans &trans &trans &trans &trans
+            >;
+        };
+
+        extra4_layer {
+            display-name = "Extra4";
+            bindings = <
+                &trans &trans &trans &trans &trans &trans &trans &trans &trans &trans &trans &trans
+                &trans &trans &trans &trans &trans &trans &trans &trans &trans &trans &trans &trans
+                &trans &trans &trans &trans &trans &trans &trans &trans &trans &trans &trans &trans
+                &trans &trans &trans &trans &trans &trans &trans &trans &trans &trans &trans &trans
+                                                    &trans &trans &trans &trans &trans &trans
+            >;
+        };
     };
 };

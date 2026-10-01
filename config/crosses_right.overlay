@@ -10,6 +10,7 @@
 // maps those back to REL_X/REL_Y so the left ball drives the cursor.
 
 #include <zephyr/dt-bindings/input/input-event-codes.h>
+#include <dt-bindings/zmk/input_transform.h>
 
 / {
     zip_scroll_to_xy_mapper: zip_scroll_to_xy_mapper {
@@ -40,8 +41,11 @@
 
     scroll_on_swap {
         layers = <4>;
+        // Natural (trackpad-style) scrolling. Y already came out inverted
+        // from the sensor orientation, so only X needs flipping here.
         input-processors
-            = <&zip_xy_to_scroll_mapper>
+            = <&zip_xy_transform (INPUT_TRANSFORM_X_INVERT)>
+            , <&zip_xy_to_scroll_mapper>
             , <&zip_scroll_scaler 1 4>
             , <&zip_ble_report_rate_limit>;
     };
@@ -51,6 +55,12 @@
 &trackball_peripheral_listener {
     status = "okay";
     device = <&trackball_peripheral_split>;
+
+    // Natural (trackpad-style) scrolling for the left ball. The left sensor
+    // is mounted mirrored, so it is assumed to arrive X-inverted / Y-normal;
+    // flip Y to match the right side. If a direction is wrong, change the
+    // flags: INPUT_TRANSFORM_X_INVERT, INPUT_TRANSFORM_Y_INVERT, or both.
+    input-processors = <&zip_scroll_transform (INPUT_TRANSFORM_Y_INVERT)>;
 
     cursor_on_swap {
         layers = <4>;

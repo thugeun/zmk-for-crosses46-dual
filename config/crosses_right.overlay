@@ -1,5 +1,12 @@
 // Right-hand trackball: overrides for the upstream cb-zmk-keebs listener.
 
+// Ignore trackball motion within 200 ms of the last key press, so typing
+// vibration does not flip the Mouse layer on. Raise if it still triggers
+// while typing; lower if the layer feels slow to engage after typing.
+&zip_temp_layer {
+    require-prior-idle-ms = <200>;
+};
+
 &trackball_central_listener {
     status = "okay";
     device = <&trackball_central>;

@@ -1,8 +1,0 @@
-// Left-hand trackball (split peripheral).
-//
-// The upstream shield converts XY to scroll here on the peripheral, which
-// cannot see layer state. Send raw XY instead; the central (right half)
-// decides scroll vs cursor per layer in crosses_right.overlay.
-&trackball_peripheral_split {
-    input-processors = <&zip_ble_report_rate_limit>;
-};

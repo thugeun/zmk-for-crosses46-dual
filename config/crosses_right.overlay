@@ -4,6 +4,24 @@
 // Normal:            left = scroll, right = cursor (+ Mouse layer)
 // Layer 4 active:    left = cursor (+ Mouse layer), right = scroll
 // Layer 4 is toggled with G on Raise (&tog 4) or held with C (&lt 4 C).
+//
+// The left half is left exactly as upstream ships it: it converts XY to
+// scroll on the peripheral and sends WHEEL/HWHEEL. In swap mode the central
+// maps those back to REL_X/REL_Y so the left ball drives the cursor.
+
+#include <zephyr/dt-bindings/input/input-event-codes.h>
+
+/ {
+    zip_scroll_to_xy_mapper: zip_scroll_to_xy_mapper {
+        compatible = "zmk,input-processor-code-mapper";
+        #input-processor-cells = <0>;
+        type = <INPUT_EV_REL>;
+        map
+            = <INPUT_REL_WHEEL INPUT_REL_Y>
+            , <INPUT_REL_HWHEEL INPUT_REL_X>
+            ;
+    };
+};
 
 // Ignore trackball motion within 200 ms of the last key press, so typing
 // vibration does not flip the Mouse layer on.
@@ -29,17 +47,16 @@
     };
 };
 
-// Left trackball (raw XY received over the split link)
+// Left trackball (arrives as scroll events over the split link)
 &trackball_peripheral_listener {
     status = "okay";
     device = <&trackball_peripheral_split>;
 
-    input-processors
-        = <&zip_xy_to_scroll_mapper>
-        , <&zip_scroll_scaler 1 2>;
-
     cursor_on_swap {
         layers = <4>;
-        input-processors = <&zip_temp_layer 3 500>;
+        input-processors
+            = <&zip_scroll_to_xy_mapper>
+            , <&zip_xy_scaler 2 1>
+            , <&zip_temp_layer 3 500>;
     };
 };

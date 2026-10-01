@@ -1,6 +1,8 @@
-// Left-hand trackball. Everything else stays as upstream (scroll conversion
-// on the peripheral). Only the Y axis is flipped at the sensor so scrolling
-// is natural (trackpad-style). If a direction is wrong: x-invert / y-invert.
+// Left-hand trackball. Scroll conversion stays upstream (on the peripheral).
 &trackball_peripheral {
+    // 400 cpi / upstream scroll scaler 1:2 = 200 effective, same as the
+    // right side (800 cpi / 1:4). Raise for faster scrolling.
+    cpi = <400>;
+    // Natural (trackpad-style) scrolling. Change to x-invert if wrong.
     y-invert;
 };

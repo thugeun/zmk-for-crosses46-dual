@@ -1,7 +1,26 @@
-// Right-hand trackball: overrides for the upstream cb-zmk-keebs listener.
-// Left trackball listener is NOT overridden here (upstream default).
+// Trackball behaviour. Layer indices (config/crosses.keymap):
+//   0 Base, 1 Lower, 2 Raise, 3 Mouse, 4 Extra1, 5-7 Extra2-4
+//
+// Normal:          left = scroll, right = cursor (+ Mouse layer)
+// Layer 4 active:  left = cursor (+ Mouse layer), right = scroll
+// Layer 4 is toggled with G on Raise (&tog 4) or held with C (&lt 4 C).
 
+#include <zephyr/dt-bindings/input/input-event-codes.h>
 #include <dt-bindings/zmk/input_transform.h>
+
+/ {
+    // Left ball arrives as WHEEL/HWHEEL (converted on the peripheral).
+    // In layer 4 this maps it back to REL_Y/REL_X for cursor movement.
+    zip_scroll_to_xy_mapper: zip_scroll_to_xy_mapper {
+        compatible = "zmk,input-processor-code-mapper";
+        #input-processor-cells = <0>;
+        type = <INPUT_EV_REL>;
+        map
+            = <INPUT_REL_WHEEL INPUT_REL_Y>
+            , <INPUT_REL_HWHEEL INPUT_REL_X>
+            ;
+    };
+};
 
 // Ignore trackball motion within 200 ms of the last key press, so typing
 // vibration does not flip the Mouse layer on.
@@ -9,25 +28,35 @@
     require-prior-idle-ms = <200>;
 };
 
+// Right trackball (local)
 &trackball_central_listener {
     status = "okay";
     device = <&trackball_central>;
 
-    // Default: move the cursor and temporarily activate the Mouse layer
-    // (keymap index 3) for 500 ms after the last movement.
     input-processors
         = <&zip_temp_layer 3 500>
         , <&zip_ble_report_rate_limit>;
 
-    // Layer 4 (held via `&lt 4 C`, toggled via `&tog 4`): scroll instead of
-    // moving. Natural scrolling: Y already arrives inverted from the sensor
+    // Natural scrolling: Y already arrives inverted from the sensor
     // orientation, so only X is flipped here.
-    scroll_on_extra1 {
+    scroll_on_layer4 {
         layers = <4>;
         input-processors
             = <&zip_xy_transform (INPUT_TRANSFORM_X_INVERT)>
             , <&zip_xy_to_scroll_mapper>
             , <&zip_scroll_scaler 1 4>
             , <&zip_ble_report_rate_limit>;
+    };
+};
+
+// Left trackball (over the split link). No default processors: outside
+// layer 4 this listener behaves exactly like upstream.
+&trackball_peripheral_listener {
+    cursor_on_layer4 {
+        layers = <4>;
+        input-processors
+            = <&zip_scroll_to_xy_mapper>
+            , <&zip_xy_scaler 3 1>
+            , <&zip_temp_layer 3 500>;
     };
 };

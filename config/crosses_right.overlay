@@ -11,11 +11,19 @@
     status = "okay";
     device = <&trackball_central>;
 
-    // While the trackball is moving, temporarily activate the Mouse layer
-    // (keymap index 3). The layer turns off 500 ms after the last movement
-    // or as soon as a key is pressed. The processor refreshes its own timer
-    // on every movement, so no per-layer override is needed.
+    // Default: move the cursor and temporarily activate the Mouse layer
+    // (keymap index 3) for 500 ms after the last movement.
     input-processors
         = <&zip_temp_layer 3 500>
         , <&zip_ble_report_rate_limit>;
+
+    // Extra1 (4), held via `&lt 4 C` on Base: trackball scrolls instead of
+    // moving the cursor. 1/4 = four sensor counts per scroll tick.
+    scroll_on_extra1 {
+        layers = <4>;
+        input-processors
+            = <&zip_xy_to_scroll_mapper>
+            , <&zip_scroll_scaler 1 4>
+            , <&zip_ble_report_rate_limit>;
+    };
 };

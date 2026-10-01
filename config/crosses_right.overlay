@@ -1,29 +1,45 @@
-// Right-hand trackball: overrides for the upstream cb-zmk-keebs listener.
+// Trackball behaviour, both halves. Layer indices (config/crosses.keymap):
+//   0 Base, 1 Lower, 2 Raise, 3 Mouse, 4 Extra1 (swap mode), 5-7 Extra2-4
+//
+// Normal:            left = scroll, right = cursor (+ Mouse layer)
+// Layer 4 active:    left = cursor (+ Mouse layer), right = scroll
+// Layer 4 is toggled with G on Raise (&tog 4) or held with C (&lt 4 C).
 
 // Ignore trackball motion within 200 ms of the last key press, so typing
-// vibration does not flip the Mouse layer on. Raise if it still triggers
-// while typing; lower if the layer feels slow to engage after typing.
+// vibration does not flip the Mouse layer on.
 &zip_temp_layer {
     require-prior-idle-ms = <200>;
 };
 
+// Right trackball (local)
 &trackball_central_listener {
     status = "okay";
     device = <&trackball_central>;
 
-    // Default: move the cursor and temporarily activate the Mouse layer
-    // (keymap index 3) for 500 ms after the last movement.
     input-processors
         = <&zip_temp_layer 3 500>
         , <&zip_ble_report_rate_limit>;
 
-    // Extra1 (4), held via `&lt 4 C` on Base: trackball scrolls instead of
-    // moving the cursor. 1/4 = four sensor counts per scroll tick.
-    scroll_on_extra1 {
+    scroll_on_swap {
         layers = <4>;
         input-processors
             = <&zip_xy_to_scroll_mapper>
             , <&zip_scroll_scaler 1 4>
             , <&zip_ble_report_rate_limit>;
+    };
+};
+
+// Left trackball (raw XY received over the split link)
+&trackball_peripheral_listener {
+    status = "okay";
+    device = <&trackball_peripheral_split>;
+
+    input-processors
+        = <&zip_xy_to_scroll_mapper>
+        , <&zip_scroll_scaler 1 2>;
+
+    cursor_on_swap {
+        layers = <4>;
+        input-processors = <&zip_temp_layer 3 500>;
     };
 };

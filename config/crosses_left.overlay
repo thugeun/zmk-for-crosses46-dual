@@ -1,0 +1,6 @@
+// Left-hand trackball. Everything else stays as upstream (scroll conversion
+// on the peripheral). Only the Y axis is flipped at the sensor so scrolling
+// is natural (trackpad-style). If a direction is wrong: x-invert / y-invert.
+&trackball_peripheral {
+    y-invert;
+};

@@ -1,9 +1,17 @@
-// Left-hand trackball. Scroll conversion stays upstream (on the peripheral).
+// Left-hand trackball. Scroll conversion happens here on the peripheral.
 &trackball_peripheral {
-    // 400 cpi / upstream scroll scaler 1:2 = 200 effective, same as the
-    // right side (800 cpi / 1:4). Raise for faster scrolling.
+    // 400 cpi / scroll scaler 1:2 = 200 effective, same as the right side
+    // (800 cpi / 1:4). Raise for faster scrolling.
     cpi = <400>;
-    // Regular (mouse-wheel style) scrolling on both axes.
-    // y-invert was removed: it made Y natural. x-invert kept as-is.
     x-invert;
+};
+
+// Same as upstream, plus X zeroed out: vertical scroll only. Horizontal
+// scrolling is still available via Shift + scroll on the host.
+&trackball_peripheral_split {
+    input-processors
+        = <&zip_x_scaler 0 1>
+        , <&zip_xy_to_scroll_mapper>
+        , <&zip_scroll_scaler 1 2>
+        , <&zip_ble_report_rate_limit>;
 };

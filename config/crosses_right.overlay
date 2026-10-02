@@ -37,8 +37,7 @@
         = <&zip_temp_layer 3 300>
         , <&zip_ble_report_rate_limit>;
 
-    // Natural scrolling: Y already arrives inverted from the sensor
-    // orientation, so only X is flipped here.
+    // Natural scrolling on Y (already inverted by the sensor orientation).
     // Layer 5 (held via `&lt 5 ENTER` on layer 4): back to normal cursor
     // behaviour even while layer 4 is toggled. Must come before the layer 4
     // node: the first matching override wins.
@@ -51,8 +50,10 @@
 
     scroll_on_layer4 {
         layers = <4>;
+        // Vertical scroll only: X is zeroed before the mapper. Horizontal
+        // scrolling is still available via Shift + scroll on the host.
         input-processors
-            = <&zip_xy_transform (INPUT_TRANSFORM_X_INVERT)>
+            = <&zip_x_scaler 0 1>
             , <&zip_xy_to_scroll_mapper>
             , <&zip_scroll_scaler 1 4>
             , <&zip_ble_report_rate_limit>;

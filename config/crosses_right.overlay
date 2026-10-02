@@ -34,7 +34,7 @@
     device = <&trackball_central>;
 
     input-processors
-        = <&zip_temp_layer 3 500>
+        = <&zip_temp_layer 3 300>
         , <&zip_ble_report_rate_limit>;
 
     // Natural scrolling: Y already arrives inverted from the sensor
@@ -45,7 +45,7 @@
     normal_on_layer5 {
         layers = <5>;
         input-processors
-            = <&zip_temp_layer 3 500>
+            = <&zip_temp_layer 3 300>
             , <&zip_ble_report_rate_limit>;
     };
 
@@ -74,6 +74,6 @@
         input-processors
             = <&zip_scroll_to_xy_mapper>
             , <&zip_xy_scaler 3 1>
-            , <&zip_temp_layer 3 500>;
+            , <&zip_temp_layer 3 300>;
     };
 };

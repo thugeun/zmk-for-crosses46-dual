@@ -1,18 +1,18 @@
-// Left-hand trackball. Scroll conversion happens here on the peripheral.
+// Left-hand trackball. Scroll conversion happens here on the peripheral and
+// both axes are sent; the central drops horizontal scroll (or maps the
+// scroll back to cursor XY in layer 4).
 &trackball_peripheral {
-    // 400 cpi / scroll scaler 1:3. Raise cpi or lower the divisor for faster scrolling.
+    // 400 cpi / scroll scaler 1:3. Raise cpi or lower the divisor for
+    // faster scrolling.
     cpi = <400>;
     x-invert;
     // Natural (trackpad-style) vertical scrolling.
     y-invert;
 };
 
-// Same as upstream, plus X zeroed out: vertical scroll only. Horizontal
-// scrolling is still available via Shift + scroll on the host.
 &trackball_peripheral_split {
     input-processors
-        = <&zip_x_scaler 0 1>
-        , <&zip_xy_to_scroll_mapper>
+        = <&zip_xy_to_scroll_mapper>
         , <&zip_scroll_scaler 1 3>
         , <&zip_ble_report_rate_limit>;
 };

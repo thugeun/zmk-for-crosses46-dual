@@ -1,9 +1,11 @@
 // Trackball behaviour. Layer indices (config/crosses.keymap):
-//   0 Base, 1 Lower, 2 Raise, 3 Mouse, 4 Extra1, 5-7 Extra2-4
+//   0 Base, 1 Lower, 2 Raise, 3 Mouse, 4 Extra1, 5 Extra2, 6-7 Extra3-4
 //
-// Normal:          left = scroll, right = cursor (+ Mouse layer)
-// Layer 4 active:  left = cursor (+ Mouse layer), right = scroll
-// Layer 4 is toggled with G on Raise (&tog 4) or held with C (&lt 4 C).
+// Normal:          left = vertical scroll, right = cursor (+ Mouse layer)
+// Layer 4 active:  left = cursor (+ Mouse layer), right = vertical scroll
+// Layer 5 active:  back to normal even while layer 4 is toggled
+//
+// Horizontal scrolling is dropped; use Shift + scroll on the host.
 
 #include <zephyr/dt-bindings/input/input-event-codes.h>
 #include <dt-bindings/zmk/input_transform.h>
@@ -19,6 +21,15 @@
             = <INPUT_REL_WHEEL INPUT_REL_Y>
             , <INPUT_REL_HWHEEL INPUT_REL_X>
             ;
+    };
+
+    // Scales only HWHEEL; used with 0 1 to drop horizontal scroll.
+    zip_hwheel_scaler: zip_hwheel_scaler {
+        compatible = "zmk,input-processor-scaler";
+        #input-processor-cells = <2>;
+        type = <INPUT_EV_REL>;
+        codes = <INPUT_REL_HWHEEL>;
+        track-remainders;
     };
 };
 
@@ -37,14 +48,14 @@
     status = "okay";
     device = <&trackball_central>;
 
+    // Default: move the cursor and temporarily activate the Mouse layer
+    // (keymap index 3) for 300 ms after the last movement.
     input-processors
         = <&zip_temp_layer 3 300>
         , <&zip_ble_report_rate_limit>;
 
-    // Natural scrolling on Y (already inverted by the sensor orientation).
-    // Layer 5 (held via `&lt 5 ENTER` on layer 4): back to normal cursor
-    // behaviour even while layer 4 is toggled. Must come before the layer 4
-    // node: the first matching override wins.
+    // Layer 5: normal cursor behaviour. Must come before the layer 4 node:
+    // the first matching override wins.
     normal_on_layer5 {
         layers = <5>;
         input-processors
@@ -52,10 +63,10 @@
             , <&zip_ble_report_rate_limit>;
     };
 
+    // Layer 4: vertical scroll. Natural on Y (already inverted by the
+    // sensor orientation). X is zeroed before the mapper.
     scroll_on_layer4 {
         layers = <4>;
-        // Vertical scroll only: X is zeroed before the mapper. Horizontal
-        // scrolling is still available via Shift + scroll on the host.
         input-processors
             = <&zip_x_scaler 0 1>
             , <&zip_xy_to_scroll_mapper>
@@ -64,16 +75,21 @@
     };
 };
 
-// Left trackball (over the split link). No default processors: outside
-// layer 4 this listener behaves exactly like upstream.
+// Left trackball (arrives as scroll events over the split link)
 &trackball_peripheral_listener {
-    // Layer 5: pass the left ball through as scroll (its upstream default),
-    // even while layer 4 is toggled. Must come before the layer 4 node.
+    status = "okay";
+    device = <&trackball_peripheral_split>;
+
+    // Default: vertical scroll only (drop HWHEEL).
+    input-processors = <&zip_hwheel_scaler 0 1>;
+
+    // Layer 5: same as default. Must come before the layer 4 node.
     normal_on_layer5 {
         layers = <5>;
-        input-processors = <&zip_ble_report_rate_limit>;
+        input-processors = <&zip_hwheel_scaler 0 1>;
     };
 
+    // Layer 4: cursor. Both axes mapped back from scroll codes.
     cursor_on_layer4 {
         layers = <4>;
         input-processors

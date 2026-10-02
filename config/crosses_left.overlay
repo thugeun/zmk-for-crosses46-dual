@@ -1,21 +1,9 @@
-// Left-hand trackball.
-#include <dt-bindings/zmk/input_transform.h>
-
+// Left-hand trackball. Scroll conversion stays upstream (on the peripheral).
 &trackball_peripheral {
-    // 400 cpi / scroll scaler 1:2 = 200 effective, same as the right side
-    // (800 cpi / 1:4). Raise for faster scrolling.
+    // 400 cpi / upstream scroll scaler 1:2 = 200 effective, same as the
+    // right side (800 cpi / 1:4). Raise for faster scrolling.
     cpi = <400>;
-    // Y is inverted at the sensor (register bit 5). X is NOT inverted here:
-    // the driver writes x-invert to register bit 6, which stops the sensor
-    // responding. X is flipped in software below instead.
+    // Natural (trackpad-style) scrolling on both axes.
+    x-invert;
     y-invert;
-};
-
-// Same chain as upstream, plus an X flip in front for natural scrolling.
-&trackball_peripheral_split {
-    input-processors
-        = <&zip_xy_transform (INPUT_TRANSFORM_X_INVERT)>
-        , <&zip_xy_to_scroll_mapper>
-        , <&zip_scroll_scaler 1 2>
-        , <&zip_ble_report_rate_limit>;
 };

@@ -29,6 +29,10 @@
 };
 
 // Right trackball (local)
+&trackball_central {
+    cpi = <600>;
+};
+
 &trackball_central_listener {
     status = "okay";
     device = <&trackball_central>;
@@ -55,7 +59,7 @@
         input-processors
             = <&zip_x_scaler 0 1>
             , <&zip_xy_to_scroll_mapper>
-            , <&zip_scroll_scaler 1 4>
+            , <&zip_scroll_scaler 1 6>
             , <&zip_ble_report_rate_limit>;
     };
 };
@@ -74,7 +78,7 @@
         layers = <4>;
         input-processors
             = <&zip_scroll_to_xy_mapper>
-            , <&zip_xy_scaler 3 1>
+            , <&zip_xy_scaler 2 1>
             , <&zip_temp_layer 3 300>;
     };
 };

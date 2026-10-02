@@ -3,7 +3,7 @@
     // 400 cpi / upstream scroll scaler 1:2 = 200 effective, same as the
     // right side (800 cpi / 1:4). Raise for faster scrolling.
     cpi = <400>;
-    // Natural (trackpad-style) scrolling on both axes.
+    // Regular (mouse-wheel style) scrolling on both axes.
+    // y-invert was removed: it made Y natural. x-invert kept as-is.
     x-invert;
-    y-invert;
 };

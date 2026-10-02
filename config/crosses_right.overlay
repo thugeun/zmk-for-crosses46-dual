@@ -39,6 +39,16 @@
 
     // Natural scrolling: Y already arrives inverted from the sensor
     // orientation, so only X is flipped here.
+    // Layer 5 (held via `&lt 5 ENTER` on layer 4): back to normal cursor
+    // behaviour even while layer 4 is toggled. Must come before the layer 4
+    // node: the first matching override wins.
+    normal_on_layer5 {
+        layers = <5>;
+        input-processors
+            = <&zip_temp_layer 3 500>
+            , <&zip_ble_report_rate_limit>;
+    };
+
     scroll_on_layer4 {
         layers = <4>;
         input-processors
@@ -52,6 +62,13 @@
 // Left trackball (over the split link). No default processors: outside
 // layer 4 this listener behaves exactly like upstream.
 &trackball_peripheral_listener {
+    // Layer 5: pass the left ball through as scroll (its upstream default),
+    // even while layer 4 is toggled. Must come before the layer 4 node.
+    normal_on_layer5 {
+        layers = <5>;
+        input-processors = <&zip_ble_report_rate_limit>;
+    };
+
     cursor_on_layer4 {
         layers = <4>;
         input-processors

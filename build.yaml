@@ -8,5 +8,11 @@ include:
     artifact-name: crosses_46_right
     snippet: studio-rpc-usb-uart
     cmake-args: -DCONFIG_ZMK_STUDIO=y
+  # Diagnostic: left half with USB serial logging (PMW3610 init messages).
+  - board: nice_nano
+    shield: crosses_left
+    artifact-name: crosses_46_left_debug
+    snippet: zmk-usb-logging
+    cmake-args: -DCONFIG_PMW3610_LOG_LEVEL_DBG=y
   - board: nice_nano
     shield: settings_reset

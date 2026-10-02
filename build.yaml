@@ -13,6 +13,6 @@ include:
     shield: crosses_left
     artifact-name: crosses_46_left_debug
     snippet: zmk-usb-logging
-    cmake-args: -DCONFIG_PMW3610_LOG_LEVEL_DBG=y
+    cmake-args: -DCONFIG_PMW3610_LOG_LEVEL_DBG=y -DCONFIG_PMW3610_SQUAL_LOG=y -DCONFIG_INPUT_EVENT_DUMP=y
   - board: nice_nano
     shield: settings_reset

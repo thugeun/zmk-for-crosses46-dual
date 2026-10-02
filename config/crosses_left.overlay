@@ -4,6 +4,8 @@
     // (800 cpi / 1:4). Raise for faster scrolling.
     cpi = <400>;
     x-invert;
+    // Natural (trackpad-style) vertical scrolling.
+    y-invert;
 };
 
 // Same as upstream, plus X zeroed out: vertical scroll only. Horizontal

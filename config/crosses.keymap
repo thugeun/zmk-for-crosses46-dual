@@ -73,11 +73,11 @@
         temp_base {
             display-name = "for_layer_4";
             bindings = <
-&trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
-&trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
-&trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
-&trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
-                        &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans     &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans     &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans     &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans     &trans  &trans  &trans  &trans  &trans  &trans  &trans
+                        &trans  &kp SPACE  &trans  &trans  &trans  &trans
             >;
         };
 

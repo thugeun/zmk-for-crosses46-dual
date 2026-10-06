@@ -1,9 +1,7 @@
-// Left-hand trackball. Scroll conversion happens here on the peripheral and
-// both axes are sent; the central drops horizontal scroll (or maps the
-// scroll back to cursor XY in layer 4).
+// Left-hand trackball. Raw XY is sent to the central; scroll conversion and
+// scaling happen there (crosses_right.overlay), so layer 4 cursor mode keeps
+// full sensor precision.
 &trackball_peripheral {
-    // 400 cpi / scroll scaler 1:3. Raise cpi or lower the divisor for
-    // faster scrolling.
     cpi = <400>;
     x-invert;
     // Natural (trackpad-style) vertical scrolling.
@@ -11,8 +9,5 @@
 };
 
 &trackball_peripheral_split {
-    input-processors
-        = <&zip_xy_to_scroll_mapper>
-        , <&zip_scroll_scaler 1 3>
-        , <&zip_ble_report_rate_limit>;
+    input-processors = <&zip_ble_report_rate_limit>;
 };
